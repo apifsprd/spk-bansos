@@ -1,16 +1,17 @@
 @extends('Auth.layouts.main')
 
 @section('content')
-<form>
+<form action="/authenticate" method="POST">
+    @csrf
     <img class="mb-4" src="/img/logo_kabupatentangerang_perda.png" alt="" width="150">
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
     <div class="form-floating">
-      <input type="email" class="form-control" id="email"  placeholder="name@example.com">
+      <input type="email" class="form-control" id="email" name="email"  placeholder="name@example.com">
       <label for="email">Email address</label>
     </div>
     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
       <label for="floatingPassword">Password</label>
     </div>
 
