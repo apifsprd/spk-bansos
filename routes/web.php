@@ -15,13 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
+// Route::get('/dashboard/datawarga', function () {
+//     return view('Dashboard.datawarga');
 // });
 
 Route::get('/', [AuthController::class, 'index']);
+Route::get('/login', [AuthController::class, 'index']);
 Route::get('/register', [AuthController::class, 'register']);
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
+Route::get('/datawarga', [DashboardController::class, 'datawarga'])->middleware('auth');
+Route::get('/kriteria', [DashboardController::class, 'kriteria'])->name('kriteria')->middleware('auth');
+Route::get('/hasil', [DashboardController::class, 'hasil'])->middleware('auth');
+Route::get('/kriteria/:id', [DashboardController::class, 'kriteriaById'])->middleware('auth');
+
+// POST
 Route::post('/register', [AuthController::class, 'store']);
 Route::post('/authenticate', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout']);
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
+Route::post('/savekriteria', [DashboardController::class, 'saveKriteria']);
+
+// DELETE
+Route::post('/delete/kriteria', [DashboardController::class, 'hapusKriteria']);
+
