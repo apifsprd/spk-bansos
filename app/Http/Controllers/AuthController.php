@@ -22,7 +22,7 @@ class AuthController extends Controller
     public function authenticate(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email:dns',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
@@ -31,7 +31,8 @@ class AuthController extends Controller
             return redirect()->intended('/dashboard');
         }
 
-        return back()->with('loginError', 'Login failed');
+        // return back()->with('loginError', 'Login failed');
+        return dd('login failed');
     }
 
     public function logout(Request $request)
@@ -46,7 +47,6 @@ class AuthController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|max:255',
-            // 'username' => ['required', 'min:5', 'max:255', 'unique:users'],
             'email' => 'required|email:dns|unique:users',
             'password' => 'required|min:8|max:255'
         ]);
@@ -54,7 +54,7 @@ class AuthController extends Controller
         // encrypt password
         // $validatedData['password'] = bcrypt($validatedData['password']);
         $validatedData['password'] = Hash::make($validatedData['password']);
-
+        // dd($validatedData);
         User::create($validatedData);
     }
 }
