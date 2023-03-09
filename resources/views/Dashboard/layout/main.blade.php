@@ -106,11 +106,6 @@
         $(document).ready(function() {
             $('#myTable').DataTable();
         });
-
-        $('.edit').on('click', function(e) {
-            const id = $(this).data('id')
-            // console.log(id)
-        })
     </script>
 
 </body>

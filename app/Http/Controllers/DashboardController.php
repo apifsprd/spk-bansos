@@ -24,19 +24,15 @@ class DashboardController extends Controller
 
     public function kriteria () 
     {
-        $kriteriaRaw = Kriteria::all();
-        $raw = [];
-        $kategoriArr = [];
-        $nilaiArr = [];
-        foreach($kriteriaRaw as $item)
-        {
-            $kategoriArr = explode('|', $item->kategori);
-            $nilaiArr = explode('|', $item->nilai); 
-            $raw = $item;
-        }
-        $combineArr = array_combine($kategoriArr, $nilaiArr);
-        // return view('Dashboard.kriteria', ['kriterias' => $kriteria]);
+        $kriteria = Kriteria::all();
+        return view('Dashboard.kriteria', ['kriterias' => $kriteria]);
     }
+
+    public function kriteriaById($id)
+    {
+        dd($request->id);
+    }
+
 
     public function saveKriteria (Request $request) 
     {
@@ -65,11 +61,6 @@ class DashboardController extends Controller
 
         //redirect to index
         return redirect()->route('kriteria')->with(['success' => 'Data Berhasil Disimpan!']);
-    }
-
-    public function kriteriaById($id)
-    {
-        dd($request->id);
     }
 
     public function hapusKriteria(Request $request)

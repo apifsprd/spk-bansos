@@ -26,7 +26,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('aut
 Route::get('/datawarga', [DashboardController::class, 'datawarga'])->middleware('auth');
 Route::get('/kriteria', [DashboardController::class, 'kriteria'])->name('kriteria')->middleware('auth');
 Route::get('/hasil', [DashboardController::class, 'hasil'])->middleware('auth');
-Route::get('/kriteria/:id', [DashboardController::class, 'kriteriaById'])->middleware('auth');
 
 // POST
 Route::post('/register', [AuthController::class, 'store']);
