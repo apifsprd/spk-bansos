@@ -1,10 +1,12 @@
 @extends('Dashboard.layout.main')
 
 @section('content')
-    <div class="row">
+    <div class="row justify-content-between align-items-center">
         <div class="col">
             <h1>Data Kriteria</h1>
-            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModal">+ Tambah Data</button>
+        </div>
+        <div class="col text-right">
+            <button class="btn btn btn-success" data-toggle="modal" data-target="#exampleModal">+ Tambah Data</button>
         </div>
     </div>
 
@@ -31,20 +33,23 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $i = 1;
+                        @endphp
                         @foreach ($kriterias as $kriteria)
                             <tr>
-                                <td>1.</td>
+                                <td>{{ $i++ }}</td>
                                 <td>{{ $kriteria->namakriteria }}</td>
                                 <td>
-                                    @foreach (explode('|', $kriteria->kategori) as $kategori)
-                                        <li>{{ $kategori }}</li>
+                                    @foreach (array_combine(explode('|', $kriteria->kategori), explode('|', $kriteria->nilai)) as $kategori => $nilai)
+                                        <li>{{ $kategori }} ({{ $nilai }})</li>
                                     @endforeach
                                 </td>
                                 <td>{{ $kriteria->bobot }}</td>
                                 <td>{{ $kriteria->attribute }}</td>
                                 <td>
-                                    <button class="edit btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal"
-                                        data-id="{{ $kriteria->id }}">Edit</button>
+                                    <button class="editKriteria btn btn-sm btn-warning" data-toggle="modal"
+                                        data-target="#editModal" data-id="{{ $kriteria->id }}">Edit</button>
                                     <form action="/delete/kriteria" method="POST" style="display:inline-block">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $kriteria->id }}">

@@ -32,7 +32,7 @@
      <li class="nav-item">
          <a class="nav-link" href="/hasil">
              <i class="fas fa-fw fa-check"></i>
-             <span>Rekomendasi Penerina</span></a>
+             <span>Rekomendasi Penerima</span></a>
      </li>
 
 
