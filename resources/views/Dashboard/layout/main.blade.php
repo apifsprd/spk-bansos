@@ -106,6 +106,44 @@
         $(document).ready(function() {
             $('#myTable').DataTable();
         });
+
+        $('.edit').on('click', function() {
+            $('.baris').html('')
+            const id = $(this).data('id')
+            const namakriteria = $(this).data('namakriteria')
+            const kategori = $(this).data('kategori')
+            const nilai = $(this).data('nilai')
+            const bobot = $(this).data('bobot')
+            const attribute = $(this).data('attribute')
+
+            const kategoriSplit = kategori.split('|')
+            const nilaiSplit = nilai.split('|')
+            // const combine = $.merge(kategoriSplit, nilaiSplit)
+
+            $('#id').val(id)
+            $('#namakriteria').val(namakriteria)
+            $('#bobot').val(bobot)
+            $('#attribute').val(attribute)
+            kategoriSplit.forEach((n, index) => {
+                const n2 = nilaiSplit[index]
+                $('.baris').append(`
+                <div id="kategori1" class="row mb-2">
+                    <div class="col">
+                        <input type="text" name="kategori[]" value=${n} class="form-control"
+                            placeholder="Ex: Buruh Pabrik">
+                    </div>
+                    <div class="col">
+                        <input type="number" step="any" name="nilai[]" value=${n2} class="form-control"
+                            placeholder="Nilai">
+                    </div>
+                    <div class="col">
+                        <a id="addrow" class="btn btn-primary">+</a>
+                    </div>
+                </div>
+            `)
+            });
+
+        })
     </script>
 
 </body>
