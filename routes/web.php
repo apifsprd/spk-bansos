@@ -32,6 +32,7 @@ Route::post('/register', [AuthController::class, 'store']);
 Route::post('/authenticate', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/savekriteria', [DashboardController::class, 'saveKriteria']);
+Route::post('/editkriteria', [DashboardController::class, 'editKriteria']);
 
 // DELETE
 Route::post('/delete/kriteria', [DashboardController::class, 'hapusKriteria']);

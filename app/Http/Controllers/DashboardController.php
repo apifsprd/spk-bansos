@@ -28,12 +28,6 @@ class DashboardController extends Controller
         return view('Dashboard.kriteria', ['kriterias' => $kriteria]);
     }
 
-    public function kriteriaById($id)
-    {
-        dd($request->id);
-    }
-
-
     public function saveKriteria (Request $request) 
     {
         // dd($request->request);
@@ -52,6 +46,25 @@ class DashboardController extends Controller
 
         //create post
         Kriteria::create([
+            'namakriteria'  => $request->namakriteria,
+            'bobot'         => $request->bobot,
+            'attribute'     => $request->attribute,
+            'kategori'       => $kategori,
+            'nilai'          => $nilai
+        ]);
+
+        //redirect to index
+        return redirect()->route('kriteria')->with(['success' => 'Data Berhasil Disimpan!']);
+    }
+
+    public function editKriteria(Request $request)
+    {
+        // dd($request->id);
+        $kategori = implode ("|", $request->kategori);
+        $nilai = implode ("|", $request->nilai);
+
+        //create post
+        Kriteria::where('id', $request->id)->update([
             'namakriteria'  => $request->namakriteria,
             'bobot'         => $request->bobot,
             'attribute'     => $request->attribute,

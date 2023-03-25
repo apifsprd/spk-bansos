@@ -26,7 +26,7 @@
                         <tr>
                             <th>No.</th>
                             <th>Kriteria</th>
-                            <th>Kategori</th>
+                            <th>Kategori (Nilai)</th>
                             <th>Bobot</th>
                             <th>Atribut</th>
                             <th>Aksi</th>
@@ -48,8 +48,11 @@
                                 <td>{{ $kriteria->bobot }}</td>
                                 <td>{{ $kriteria->attribute }}</td>
                                 <td>
-                                    <button class="editKriteria btn btn-sm btn-warning" data-toggle="modal"
-                                        data-target="#editModal" data-id="{{ $kriteria->id }}">Edit</button>
+                                    <button class="edit btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal"
+                                        data-id="{{ $kriteria->id }}" data-namakriteria="{{ $kriteria->namakriteria }}"
+                                        data-kategori="{{ $kriteria->kategori }}" data-nilai="{{ $kriteria->nilai }}"
+                                        data-bobot="{{ $kriteria->bobot }}"
+                                        data-attribute="{{ $kriteria->attribute }}">Edit</button>
                                     <form action="/delete/kriteria" method="POST" style="display:inline-block">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $kriteria->id }}">
@@ -139,22 +142,24 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="/savekriteria" method="POST">
+                            <form action="/editkriteria" method="POST">
                                 @csrf
+                                <input type="hidden" id="id" name="id">
                                 <div class="row">
                                     <div class="col">
                                         <label for="">Nama Kriteria</label>
-                                        <input type="text" name="namakriteria" class="form-control"
+                                        <input type="text" name="namakriteria" id="namakriteria" class="form-control"
                                             placeholder="Ex: Pekerjaan">
                                     </div>
                                     <div class="col">
                                         <label for="">Bobot</label>
-                                        <input type="number" step="any" name="bobot" class="form-control">
+                                        <input type="number" step="any" name="bobot" id="bobot"
+                                            class="form-control">
                                     </div>
                                     <div class="col">
                                         <label for="">Attribute</label>
-                                        <select name="attribute" class="custom-select" id="">
-                                            <option value="">-Select Option-</option>
+                                        <select name="attribute" class="custom-select" id="attribute">
+                                            <option value="" id="option"></option>
                                             <option value="cost">Cost</option>
                                             <option value="benefit">Benefit</option>
                                         </select>
@@ -165,19 +170,6 @@
                                         <label for="">Kategori</label>
                                     </div>
                                 </div>
-                                <div id="kategori1" class="row mb-2">
-                                    <div class="col">
-                                        <input type="text" name="kategori[]" class="form-control"
-                                            placeholder="Ex: Buruh Pabrik">
-                                    </div>
-                                    <div class="col">
-                                        <input type="number" step="any" name="nilai[]" class="form-control"
-                                            placeholder="Nilai">
-                                    </div>
-                                    <div class="col">
-                                        <a id="addrow" class="btn btn-primary">+</a>
-                                    </div>
-                                </div>
                                 <div class="baris">
 
                                 </div>
@@ -185,7 +177,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Tambah Data</button>
+                            <button type="submit" class="btn btn-primary">Edit Data</button>
                         </div>
                         </form>
                     </div>
@@ -196,16 +188,16 @@
                 const addrow = function() {
                     document.getElementsByClassName("baris")[0].innerHTML +=
                         `<div id="kategori" class="row mb-2">
-                  <div class="col">
-                     <input type="text" name="kategori[]" class="form-control" placeholder="Ex: Buruh Pabrik">
-                  </div>
-                  <div class="col">
-                     <input type="number" step="any" name="nilai[]"  class="form-control" placeholder="Nilai">
-                  </div>
-                  <div class="col">
-                     <a onclick=rmvrow() class="btn btn-danger">-</a>
-                  </div>
-            </div>`
+                            <div class="col">
+                                <input type="text" name="kategori[]" class="form-control" placeholder="Ex: Buruh Pabrik">
+                            </div>
+                            <div class="col">
+                                <input type="number" step="any" name="nilai[]"  class="form-control" placeholder="Nilai">
+                            </div>
+                            <div class="col">
+                                <a onclick=rmvrow() class="btn btn-danger">-</a>
+                            </div>
+                        </div>`
                 }
                 const rmvrow = function() {
                     const kategori = document.getElementById('kategori')
