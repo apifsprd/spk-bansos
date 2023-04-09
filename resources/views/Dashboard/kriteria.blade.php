@@ -6,7 +6,7 @@
             <h1>Data Kriteria</h1>
         </div>
         <div class="col text-right">
-            <button class="btn btn btn-success" data-toggle="modal" data-target="#exampleModal">+ Tambah Data</button>
+            <button class="btn btn btn-success" onclick="rmvbaris()" data-toggle="modal" data-target="#exampleModal">+ Tambah Data</button>
         </div>
     </div>
 
@@ -92,7 +92,7 @@
                                     <div class="col">
                                         <label for="">Attribute</label>
                                         <select name="attribute" class="custom-select" id="">
-                                            <option value="">-Select Option-</option>
+                                            <option value="" selected disabled>-Select Option-</option>
                                             <option value="cost">Cost</option>
                                             <option value="benefit">Benefit</option>
                                         </select>
@@ -185,6 +185,10 @@
             </div>
 
             <script>
+                const rmvbaris = () => {
+                    document.getElementsByClassName("baris")[0].innerHTML = ''
+                }
+
                 const addrow = function() {
                     document.getElementsByClassName("baris")[0].innerHTML +=
                         `<div id="kategori" class="row mb-2">
@@ -199,10 +203,7 @@
                             </div>
                         </div>`
                 }
-                const rmvrow = function() {
-                    const kategori = document.getElementById('kategori')
-                    kategori.remove()
-                }
+                
                 document.getElementById('addrow').onclick = addrow;
             </script>
         @endsection

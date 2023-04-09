@@ -10,7 +10,7 @@
 <ul class="navbar-nav ml-auto">
     <div class="topbar-divider d-none d-sm-block"></div>
     <li>
-      <button class="btn btn-block" ><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>Logout</button>
+      <button class="btn btn-block"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>Logout</button>
     </li>
 </ul>
 

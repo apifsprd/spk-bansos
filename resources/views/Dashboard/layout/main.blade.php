@@ -9,16 +9,18 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Blank</title>
+    <title>{{ $title }}</title>
+
+    <link rel="shortcut icon" href="/img/logo.png" type="image/x-icon">
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"rel="stylesheet">
     <link rel="stylesheet" href="/vendor/datatables/dataTables.bootstrap4.min.css">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -90,62 +92,84 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
 
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable();
-        });
-
-        $('.edit').on('click', function() {
-            $('.baris').html('')
-            const id = $(this).data('id')
-            const namakriteria = $(this).data('namakriteria')
-            const kategori = $(this).data('kategori')
-            const nilai = $(this).data('nilai')
-            const bobot = $(this).data('bobot')
-            const attribute = $(this).data('attribute')
-
-            const kategoriSplit = kategori.split('|')
-            const nilaiSplit = nilai.split('|')
-            // const combine = $.merge(kategoriSplit, nilaiSplit)
-
-            $('#id').val(id)
-            $('#namakriteria').val(namakriteria)
-            $('#bobot').val(bobot)
-            $('#attribute').val(attribute)
-            kategoriSplit.forEach((n, index) => {
-                const n2 = nilaiSplit[index]
-                $('.baris').append(`
-                <div id="kategori1" class="row mb-2">
-                    <div class="col">
-                        <input type="text" name="kategori[]" value=${n} class="form-control"
-                            placeholder="Ex: Buruh Pabrik">
-                    </div>
-                    <div class="col">
-                        <input type="number" step="any" name="nilai[]" value=${n2} class="form-control"
-                            placeholder="Nilai">
-                    </div>
-                    <div class="col">
-                        <a id="addrow" class="btn btn-primary">+</a>
-                    </div>
-                </div>
-            `)
-            });
-
-        })
-    </script>
+    
 
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('#myTable').DataTable();
+    });
+
+    $('.edit').on('click', function() {
+        $('.baris').html('')
+        const id = $(this).data('id')
+        const namakriteria = $(this).data('namakriteria')
+        const kategori = $(this).data('kategori')
+        const nilai = $(this).data('nilai')
+        const bobot = $(this).data('bobot')
+        const attribute = $(this).data('attribute')
+
+        const kategoriSplit = kategori.split('|')
+        const nilaiSplit = nilai.split('|')
+        // const combine = $.merge(kategoriSplit, nilaiSplit)
+
+        $('#id').val(id)
+        $('#namakriteria').val(namakriteria)
+        $('#bobot').val(bobot)
+        $('#attribute').val(attribute)
+        kategoriSplit.forEach((n, index) => {
+            const n2 = nilaiSplit[index]
+            $('.baris').append(`
+            <div id="kategori1" class="row mb-2">
+                <div class="col">
+                    <input type="text" name="kategori[]" value='${n}' class="form-control"
+                        placeholder="Ex: Buruh Pabrik">
+                </div>
+                <div class="col">
+                    <input type="number" step="any" name="nilai[]" value=${n2} class="form-control"
+                        placeholder="Nilai">
+                </div>
+                <div class="col">
+                    
+                </div>
+            </div>
+        `)
+        });
+
+    })
+
+    $('.addWarga').on('click', function() {
+        $('.formaddwarga').html('')
+        const kriteria = $(this).data('kriteria')
+
+        kriteria.forEach(element => {            
+        $('.formaddwarga').append(`
+        <div class="col">
+        <label for="">${element.namakriteria}</label>
+        <select name="attribute" class="custom-select" id="attribute">
+            <option>${}</option>
+        </select>
+        </div>`)
+        });
+    })
+
+    const rmvrow = function() {
+        const kategori = document.getElementById('kategori')
+        kategori.remove()
+    }
+</script>
 
 </html>

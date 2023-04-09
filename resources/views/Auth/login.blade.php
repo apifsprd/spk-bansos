@@ -13,8 +13,8 @@
         </div>
         <div class="form-group">
         </div>
-        <button type="submit" class="btn btn-primary btn-user btn-block">
-            Login
+        <button type="submit" class="btn btn-primary btn-user btn-block mt-5">
+            LOGIN
         </button>
     </form>
 @endsection
