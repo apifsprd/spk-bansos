@@ -12,6 +12,7 @@ class DetailWarga extends Model
     protected $fillable = [
         'id_warga',
         'kolom',
+        'label',
         'value',
     ];
 }

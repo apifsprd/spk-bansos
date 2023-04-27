@@ -41,7 +41,7 @@
                             <td>{{ $i++ }}</td>
                             <td>{{ $item->nama }}</td>
                             <td>{{ $item->nik }}</td>
-                            @foreach (explode("|", $item->value) as $x)
+                            @foreach (explode("|", $item->label) as $x)
                                 <td>{{ $x }}</td>                        
                             @endforeach
                             <td>
@@ -54,4 +54,6 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
         @endsection

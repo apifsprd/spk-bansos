@@ -31,8 +31,8 @@
                             <label for="">{{ $kriteria->namakriteria }}</label>
                             <select name="{{ strtolower(str_replace(" ","",$kriteria->namakriteria)) }}" class="custom-select" id="">
                                 <option value="">-PILIH-</option>
-                                @foreach (explode("|", $kriteria->kategori) as $item)
-                                <option value="{{ $item }}">{{ $item }}</option>
+                                @foreach (array_combine(explode('|', $kriteria->kategori), explode('|', $kriteria->nilai)) as $kategori => $nilai)
+                                <option value="{{ $kategori }}|{{ $nilai }}">{{ $kategori }}</option>
                                 @endforeach
                             </select>
                         </div>

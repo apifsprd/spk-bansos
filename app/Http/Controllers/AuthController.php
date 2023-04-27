@@ -31,8 +31,8 @@ class AuthController extends Controller
             return redirect()->intended('/dashboard');
         }
 
-        // return back()->with('loginError', 'Login failed');
-        return dd('login failed');
+        return back()->with(['error' => 'Email atau Password anda salah']);
+        // return redirect()->route('/')->with(['success' => 'Email atau Password anda salah']);;
     }
 
     public function logout(Request $request)

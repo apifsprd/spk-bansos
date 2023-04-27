@@ -24,7 +24,7 @@ class DashboardController extends Controller
     {
         $kriteria = Kriteria::All();
         $detailwarga = Warga::join('detail_wargas as dw', 'wargas.id', '=', 'dw.id_warga')
-        ->select('wargas.*', 'dw.kolom', 'dw.value')->get();
+        ->select('wargas.*', 'dw.kolom', 'dw.label','dw.value')->get();
         // $warga = Warga::All();
         return view('Dashboard.datawarga', [
             'Kriterias' => $kriteria,
@@ -47,7 +47,7 @@ class DashboardController extends Controller
     {
         $kriteria = Kriteria::All();     
         $warga = Warga::join('detail_wargas as dw', 'wargas.id', '=', 'dw.id_warga')
-        ->select('wargas.*', 'dw.kolom', 'dw.value')->where('wargas.id', '=', $id)->get();
+        ->select('wargas.*', 'dw.kolom', 'dw.label','dw.value')->where('wargas.id', '=', $id)->get();
         return view('Dashboard.editwarga', [
             'Kriterias' => $kriteria,
             'warga' => $warga,
@@ -69,16 +69,22 @@ class DashboardController extends Controller
         ])->id;
         $data = $request->except('_token', 'nama', 'nik');
         $kolom = [];
-        $values = [];
+        $label = [];
+        $nilai = [];
         foreach($data as $id => $value){
-        array_push($kolom, $id);
-        array_push($values, $value);
+            array_push($kolom, $id);
+            $x = explode('|',$value,2);
+            array_push($label, $x[0]);
+            array_push($nilai, $x[1]);
         }
         $ik = implode("|", $kolom);
-        $iv = implode("|", $values);
+        $il = implode("|", $label);
+        $iv = implode("|", $nilai);
+        // dd($ik, $il, $iv);
         DetailWarga::create([
         'id_warga' => $lastInsertedId,
         'kolom' => $ik,
+        'label' => $il,
         'value' => $iv
         ]);
         return redirect()->route('datawarga')->with(['success' => 'Data Berhasil Disimpan!']);
@@ -156,8 +162,14 @@ class DashboardController extends Controller
         return redirect()->route('kriteria')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 
-    public function hasil () 
+    public function hasil (Request $request)
     {
-        return view('Dashboard.hasil', ['title' => 'Rekomendasi Penerima | SPK BANSOS']);
+        if($request->isMethod('post')){
+            dd($request);
+        }
+        $warga = Warga::join('detail_wargas as dw', 'wargas.id', '=', 'dw.id_warga')
+        ->select('wargas.*', 'dw.kolom', 'dw.label','dw.value')->get();
+        dd($warga);
+        return view('Dashboard.hasil', ['title' => 'Rekomendasi Penerima | SPK BANSOS', 'warga' => $warga]);
     }
 }

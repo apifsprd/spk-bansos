@@ -37,6 +37,7 @@ Route::post('/savekriteria', [DashboardController::class, 'saveKriteria']);
 Route::post('/editkriteria', [DashboardController::class, 'editKriteria']);
 Route::post('/update/warga', [DashboardController::class, 'updateWarga']);
 Route::post('/savewarga', [DashboardController::class, 'saveWarga']);
+Route::post('/hasil', [DashboardController::class, 'hasil']);
 
 // DELETE
 Route::post('/delete/kriteria', [DashboardController::class, 'hapusKriteria']);

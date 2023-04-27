@@ -148,23 +148,22 @@
             </div>
         `)
         });
-
     })
 
-    $('.addWarga').on('click', function() {
-        $('.formaddwarga').html('')
-        const kriteria = $(this).data('kriteria')
+    // $('.addWarga').on('click', function() {
+    //     $('.formaddwarga').html('')
+    //     const kriteria = $(this).data('kriteria')
 
-        kriteria.forEach(element => {            
-        $('.formaddwarga').append(`
-        <div class="col">
-        <label for="">${element.namakriteria}</label>
-        <select name="attribute" class="custom-select" id="attribute">
-            <option>${}</option>
-        </select>
-        </div>`)
-        });
-    })
+    //     kriteria.forEach(element => {            
+    //     $('.formaddwarga').append(`
+    //     <div class="col">
+    //     <label for="">${element.namakriteria}</label>
+    //     <select name="attribute" class="custom-select" id="attribute">
+    //         <option>${}</option>
+    //     </select>
+    //     </div>`)
+    //     });
+    // })
 
     const rmvrow = function() {
         const kategori = document.getElementById('kategori')
