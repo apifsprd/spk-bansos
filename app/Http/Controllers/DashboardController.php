@@ -18,9 +18,9 @@ class DashboardController extends Controller
     public function index()
     {
         $kriteria = Kriteria::All();
-        $warga = Warga::join('detail_wargas as dw', 'wargas.id', '=', 'dw.id_warga')
-        ->select('wargas.*', 'dw.*')->get();
-        // $jmlhwarga = DB::table('wargas')->select('count(*) as jmlhwarga');
+        $warga =  DB::table('wargas')
+        ->select('wargas.nik', 'wargas.nama')       
+        ->get();
         return view('Dashboard.index', [
             'title' => 'Dashboard | SPK BANSOS',
             'kriterias' => $kriteria,

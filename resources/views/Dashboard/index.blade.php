@@ -65,7 +65,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @php
+                            @php
                                 $i = 1;
                             @endphp
                             @foreach ($warga as $wrg)
@@ -74,7 +74,7 @@
                                     <td>{{ $wrg->nama }}</td>
                                     <td>{{ $wrg->nik }}</td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
