@@ -46,12 +46,12 @@
                     @php
                             $i=1
                         @endphp               
-                    @foreach ($warga as $w)
+                    @foreach ($hasil as $key => $value)
                     <tr>
                         <td>{{ $i++ }}</td>
-                        <td>{{ $w->nama }}</td>
-                        <td>{{ $w->nik }}</td>
-                        <td>nilai</td>
+                        <td>{{ $value['nama'] }}</td>
+                        <td>{{ $value['nik'] }}</td>
+                        <td>{{ round($value['prefer'], 4) }}</td>
                     </tr>
                     @endforeach
                 </tbody>

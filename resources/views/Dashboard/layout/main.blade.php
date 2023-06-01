@@ -54,7 +54,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Sistem Penunjang Keputusan (SPK) pemberian bantuan sosial by Hadis {{ date('Y') }}</span>
                     </div>
                 </div>
             </footer>
@@ -110,7 +110,12 @@
 
 <script>
     $(document).ready(function() {
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+  "ordering": false
+} );
+        $('#table1').DataTable();
+        $('#table2').DataTable();
+        $('#tabel').DataTable();
     });
 
     $('.edit').on('click', function() {

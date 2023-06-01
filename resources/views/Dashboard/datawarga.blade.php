@@ -20,14 +20,15 @@
     <div class="card mb-4 mt-4">
         <div class="card-body">
             <div class="table-responsive">
+                @if ($kategori != null)
                 <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No.</th>
                             <th>Nama</th>
                             <th>NIK</th>
-                            @foreach ($Kriterias as $kriteria)
-                                <th>{{ $kriteria->namakriteria }}</th>
+                            @foreach (explode("|", $kategori[0]) as $kategori)
+                                <th>{{ $kategori}}</th>
                             @endforeach
                             <th>Aksi</th>
                         </tr>
@@ -41,7 +42,7 @@
                             <td>{{ $i++ }}</td>
                             <td>{{ $item->nama }}</td>
                             <td>{{ $item->nik }}</td>
-                            @foreach (explode("|", $item->label) as $x)
+                            @foreach (explode("|", $item->keyy) as $x)
                                 <td>{{ $x }}</td>                        
                             @endforeach
                             <td>
@@ -53,6 +54,23 @@
                         
                     </tbody>
                 </table>
+                @else
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Nama</th>
+                            <th>NIK</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3" class="text-center p-3  ">NO DATA</td>
+                        </tr>
+                    </tbody>
+                </table>
+                @endif
+                
             </div>
         </div>
     </div>

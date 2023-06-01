@@ -9,10 +9,7 @@ class DetailWarga extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $fillable = [
-        'id_warga',
-        'kolom',
-        'label',
-        'value',
+    protected $guarded = [
+        'id'
     ];
 }
