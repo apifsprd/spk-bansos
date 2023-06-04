@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Kriteria;
 use App\Models\Warga;
+use App\Models\Kriteria;
 use App\Models\DetailWarga;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class DashboardController extends Controller
 {
@@ -33,14 +35,20 @@ class DashboardController extends Controller
     {
         $kriteria = Kriteria::All();
         $warga = DB::table('wargas')
-        ->select('wargas.*',DB::raw("GROUP_CONCAT(dw.kategori SEPARATOR '|') as `kategori`"), DB::raw("GROUP_CONCAT(dw.key SEPARATOR '|') as `keyy`"), DB::raw("GROUP_CONCAT(dw.val SEPARATOR '|') as `val`"))
-        ->join('detail_wargas as dw', 'wargas.id', '=', 'dw.id_warga')
-        ->groupBy('dw.id_warga', 'wargas.id','wargas.nama', 'wargas.nik')
-        ->get();
+            ->select(
+                'wargas.*',
+                DB::raw("GROUP_CONCAT(DISTINCT dw.kategori ORDER BY dw.kategori ASC SEPARATOR '|') as `kategori`"), 
+                DB::raw("GROUP_CONCAT(dw.key ORDER BY dw.kategori ASC SEPARATOR '|') as `keyy`"),
+                DB::raw("GROUP_CONCAT(dw.val ORDER BY dw.kategori ASC SEPARATOR '|') as `val`")
+            )
+            ->join('detail_wargas as dw', 'wargas.id', '=', 'dw.id_warga')
+            ->groupBy('dw.id_warga', 'wargas.id','wargas.nama', 'wargas.nik')
+            ->get();
         $kategori = [];
         foreach($warga as $w){
             array_push($kategori, $w->kategori);
         }
+
         return view('Dashboard.datawarga', [
             'Kriterias' => $kriteria,
             'kategori' => $kategori,
@@ -208,9 +216,88 @@ class DashboardController extends Controller
     public function hasil (Request $request)
     {
         if($request->isMethod('post')){
-            dd($request);
+            $params = $request->kuota;
+            $this->exportPDF($params);
+            $warga = DB::table('wargas')
+                    ->select('wargas.id','wargas.nik', 'wargas.nama', 'k.namakriteria', 'k.attribute', 'k.bobot', 'dw.val')
+                    ->join('detail_wargas as dw', 'wargas.id', '=', 'dw.id_warga')
+                    ->join('kriterias as k', 'dw.kategori', '=', DB::raw("REPLACE(k.namakriteria, ' ', '')"))
+                    ->get();
+
+            $nilai_maxmin = DB::table('detail_wargas as dw')
+                            ->select(
+                                'k.namakriteria', 
+                                'k.attribute',
+                                DB::raw('(case when (k.attribute = "cost") THEN MIN(dw.val) ELSE MAX(dw.val) END) as maxmin')
+                            )
+                            ->join('kriterias as k', 'dw.kategori', '=', DB::raw("REPLACE(k.namakriteria, ' ', '')"))
+                            ->groupBy('k.namakriteria', 'k.attribute')
+                            ->get();
+
+        
+
+            function in_array_r($needle, $haystack, $strict = false) {
+                foreach ($haystack as $item) {
+                    if (($strict ? $item->namakriteria === $needle->namakriteria : $item->namakriteria == $needle->namakriteria) || (is_array($item->namakriteria) && in_array_r($needle->namakriteria, $item->namakriteria, $strict))) {
+                        if ($item->attribute == 'cost') {
+                            $nilai = $item->maxmin/$needle->val;
+                        } else {
+                            $nilai =$needle->val/$item->maxmin;
+                        }
+                        
+                        $array = json_decode(json_encode($needle), true);
+                        $array['nilai']=$nilai;
+                        $array['normalisasi']=$nilai*$needle->bobot;    
+                        DB::table('detail_wargas')
+                            ->where([
+                                ['id_warga', $needle->id],
+                                ['kategori', strtolower(str_replace(' ', '', $needle->namakriteria))]
+                            ])
+                            ->update(['nilai' => $nilai]); 
+                        DB::table('detail_wargas')
+                        ->where([
+                            ['id_warga', $needle->id],
+                            ['kategori', strtolower(str_replace(' ', '', $needle->namakriteria))]
+                        ])
+                        ->update(['normalisasi' => $nilai*$needle->bobot]);       
+                        return $array;
+                    }
+                }
+                return false;
+            }
+
+            $test2 = [];
+
+            foreach ($warga as $key => $val) {
+                if(in_array_r($val, $nilai_maxmin))
+                { 
+                $test = in_array_r($val, $nilai_maxmin);
+                array_push($test2, $test);
+                }
+            }
+
+            // dd($test2);
+
+            $groupedItems = array();
+
+            foreach($test2 as $item)
+            {
+                $groupedItems[$item['id']][] = $item;
+            }
+            $groupedItems = array_values($groupedItems);
+            
+            $preferensi = [];
+            foreach ($groupedItems as $key => $value) {
+            $nilaiPreferensi = array_column($value, 'normalisasi');
+            array_push($preferensi, ["nik" => $value[0]["nik"], "nama" => $value[0]['nama'], 'prefer' => array_sum($nilaiPreferensi)]);
+            }
+
+            $col = array_column( $preferensi, "prefer" );
+            array_multisort( $col, SORT_DESC, $preferensi );
+            
+
+            return view('Dashboard.hasil', ['title' => 'Rekomendasi Penerima | SPK BANSOS', 'hasil' => array_slice($preferensi, 0, $request->kuota), 'kuota' => sizeof(array_slice($preferensi, 0, $request->kuota))]);
         }
-        // $raw = DB::table('detail_wargas as dw')->select('wargas.nama', 'dw.kategori', 'dw.key', 'dw.val', 'k.attribute')->join('wargas', 'wargas.id', '=', 'dw.id_warga')->join('kriterias as k', DB::raw("REPLACE(k.namakriteria, ' ', '')"), '=', 'dw.kategori')->get();
         
         $warga = DB::table('wargas')
                     ->select('wargas.id','wargas.nik', 'wargas.nama', 'k.namakriteria', 'k.attribute', 'k.bobot', 'dw.val')
@@ -289,7 +376,91 @@ class DashboardController extends Controller
         $col = array_column( $preferensi, "prefer" );
         array_multisort( $col, SORT_DESC, $preferensi );
 
-        return view('Dashboard.hasil', ['title' => 'Rekomendasi Penerima | SPK BANSOS', 'hasil' => $preferensi]);
+        return view('Dashboard.hasil', ['title' => 'Rekomendasi Penerima | SPK BANSOS', 'hasil' => $preferensi, 'kuota' => sizeof($preferensi)]);
+    }
+
+
+    // export PDF
+    public function exportPDF($kuota) {
+       
+        $warga = DB::table('wargas')
+                    ->select('wargas.id','wargas.nik', 'wargas.nama', 'k.namakriteria', 'k.attribute', 'k.bobot', 'dw.val')
+                    ->join('detail_wargas as dw', 'wargas.id', '=', 'dw.id_warga')
+                    ->join('kriterias as k', 'dw.kategori', '=', DB::raw("REPLACE(k.namakriteria, ' ', '')"))
+                    ->get();
+
+        $nilai_maxmin = DB::table('detail_wargas as dw')
+                        ->select(
+                            'k.namakriteria', 
+                            'k.attribute',
+                            DB::raw('(case when (k.attribute = "cost") THEN MIN(dw.val) ELSE MAX(dw.val) END) as maxmin')
+                        )
+                        ->join('kriterias as k', 'dw.kategori', '=', DB::raw("REPLACE(k.namakriteria, ' ', '')"))
+                        ->groupBy('k.namakriteria', 'k.attribute')
+                        ->get();
+
+       
+
+        function in_array_r2($needle, $haystack, $strict = false) {
+            foreach ($haystack as $item) {
+                if (($strict ? $item->namakriteria === $needle->namakriteria : $item->namakriteria == $needle->namakriteria) || (is_array($item->namakriteria) && in_array_r2($needle->namakriteria, $item->namakriteria, $strict))) {
+                    if ($item->attribute == 'cost') {
+                        $nilai = $item->maxmin/$needle->val;
+                    } else {
+                        $nilai =$needle->val/$item->maxmin;
+                    }
+                    
+                    $array = json_decode(json_encode($needle), true);
+                    $array['nilai']=$nilai;
+                    $array['normalisasi']=$nilai*$needle->bobot;    
+                    DB::table('detail_wargas')
+                        ->where([
+                            ['id_warga', $needle->id],
+                            ['kategori', strtolower(str_replace(' ', '', $needle->namakriteria))]
+                        ])
+                        ->update(['nilai' => $nilai]); 
+                    DB::table('detail_wargas')
+                    ->where([
+                        ['id_warga', $needle->id],
+                        ['kategori', strtolower(str_replace(' ', '', $needle->namakriteria))]
+                    ])
+                    ->update(['normalisasi' => $nilai*$needle->bobot]);       
+                    return $array;
+                }
+            }
+            return false;
+        }
+
+        $test2 = [];
+
+        foreach ($warga as $key => $val) {
+            if(in_array_r2($val, $nilai_maxmin))
+            { 
+               $test = in_array_r2($val, $nilai_maxmin);
+               array_push($test2, $test);
+            }
+        }        
+
+        $groupedItems = array();
+
+        foreach($test2 as $item)
+        {
+            $groupedItems[$item['id']][] = $item;
+        }
+        $groupedItems = array_values($groupedItems);
+        
+        $preferensi = [];
+        foreach ($groupedItems as $key => $value) {
+           $nilaiPreferensi = array_column($value, 'normalisasi');
+           array_push($preferensi, ["nik" => $value[0]["nik"], "nama" => $value[0]['nama'], 'prefer' => array_sum($nilaiPreferensi)]);
+        }
+
+        $col = array_column( $preferensi, "prefer" );
+        array_multisort( $col, SORT_DESC, $preferensi );
+
+        $pdf = Pdf::loadView('Dashboard/pdf', ['data' => array_slice($preferensi, 0, $kuota)]);
+        
+        return $pdf->stream('list-penerima-bansos-pdf.pdf');
     }
 }
 

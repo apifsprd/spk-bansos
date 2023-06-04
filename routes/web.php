@@ -28,6 +28,7 @@ Route::get('/kriteria', [DashboardController::class, 'kriteria'])->name('kriteri
 Route::get('/hasil', [DashboardController::class, 'hasil'])->middleware('auth');
 Route::get('/addwarga', [DashboardController::class, 'addWarga'])->middleware('auth');
 Route::get('/editwarga/{id}', [DashboardController::class, 'editWarga'])->middleware('auth');
+Route::get('/hasil/pdf/{kuota}', [DashboardController::class, 'exportPDF'])->middleware('auth');
 
 // POST
 Route::post('/register', [AuthController::class, 'store']);

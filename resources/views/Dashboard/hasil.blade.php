@@ -14,6 +14,7 @@
        <div class="row">
         <div class="col-6">
             <form action="/hasil" method="POST">
+                @csrf
                 <div class="row">
                     <div class="col">
                         <input type="number" class="form-control" name="kuota" placeholder="Input Kuota Penerima">
@@ -25,7 +26,7 @@
             </form>
         </div>
         <div class="col-6 text-right">
-            <button class="btn btn-success mb-3">EXPORT DATA TO PDF</button>
+            <a href="/hasil/pdf/{{ $kuota }}" class="btn btn-success mb-3" target="_blank">EXPORT DATA TO PDF</a>
         </div>
        </div>
     </div>
