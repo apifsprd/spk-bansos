@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2023 at 02:24 PM
+-- Generation Time: Jun 04, 2023 at 06:07 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -20,6 +20,68 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_spkbansos`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `detail_wargas`
+--
+
+CREATE TABLE `detail_wargas` (
+  `id` int(11) NOT NULL,
+  `id_warga` int(11) NOT NULL,
+  `kategori` varchar(255) NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `val` int(11) NOT NULL,
+  `nilai` float DEFAULT NULL,
+  `normalisasi` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `detail_wargas`
+--
+
+INSERT INTO `detail_wargas` (`id`, `id_warga`, `kategori`, `key`, `val`, `nilai`, `normalisasi`) VALUES
+(37, 13, 'pekerjaan', 'PNS/Karyawan Swasta', 5, 0.2, 0.04),
+(38, 13, 'penghasilan', '>4.000.000', 5, 0.4, 0.12),
+(39, 13, 'jumlahtanggungan', '<=2', 1, 0.25, 0.05),
+(40, 13, 'kondisirumah', 'Tembok Lantai Keramik', 5, 0.2, 0.06),
+(45, 16, 'pekerjaan', 'PNS/Karyawan Swasta', 5, 0.2, 0.04),
+(46, 16, 'penghasilan', '>4.000.000', 5, 0.4, 0.12),
+(47, 16, 'jumlahtanggungan', '<=2', 1, 0.25, 0.05),
+(48, 16, 'kondisirumah', 'Tembok Lantai Keramik', 5, 0.2, 0.06),
+(49, 17, 'pekerjaan', 'Buruh', 3, 0.333333, 0.0666667),
+(50, 17, 'penghasilan', '>2.000.000-3.000.000', 3, 0.666667, 0.2),
+(51, 17, 'jumlahtanggungan', '>=5', 4, 1, 0.2),
+(52, 17, 'kondisirumah', 'Tembok Lantai Keramik', 5, 0.2, 0.06),
+(53, 18, 'pekerjaan', 'Petani', 2, 0.5, 0.1),
+(54, 18, 'penghasilan', '1.000.000-2.000.000', 2, 1, 0.3),
+(55, 18, 'jumlahtanggungan', '4', 3, 0.75, 0.15),
+(56, 18, 'kondisirumah', 'Bambu Lantai Plester', 2, 0.5, 0.15),
+(57, 19, 'pekerjaan', 'PNS/Karyawan Swasta', 5, 0.2, 0.04),
+(58, 19, 'penghasilan', '>4.000.000', 5, 0.4, 0.12),
+(59, 19, 'jumlahtanggungan', '>=5', 4, 1, 0.2),
+(60, 19, 'kondisirumah', 'Tembok Lantai Keramik', 5, 0.2, 0.06),
+(61, 20, 'pekerjaan', 'Lain-lain', 1, 1, 0.2),
+(62, 20, 'penghasilan', '1.000.000-2.000.000', 2, 1, 0.3),
+(63, 20, 'jumlahtanggungan', '3', 2, 0.5, 0.1),
+(64, 20, 'kondisirumah', 'Tembok Lantai Tanah', 3, 0.333333, 0.1),
+(65, 21, 'pekerjaan', 'PNS/Karyawan Swasta', 5, 0.2, 0.04),
+(66, 21, 'penghasilan', '>4.000.000', 5, 0.4, 0.12),
+(67, 21, 'jumlahtanggungan', '<=2', 1, 0.25, 0.05),
+(68, 21, 'kondisirumah', 'Tembok Lantai Keramik', 5, 0.2, 0.06),
+(69, 22, 'pekerjaan', 'Wirausaha/Wiraswasta', 4, 0.25, 0.05),
+(70, 22, 'penghasilan', '1.000.000-2.000.000', 2, 1, 0.3),
+(71, 22, 'jumlahtanggungan', '<=2', 1, 0.25, 0.05),
+(72, 22, 'kondisirumah', 'Bambu Lantai Plester', 2, 0.5, 0.15),
+(73, 23, 'pekerjaan', 'Petani', 2, 0.5, 0.1),
+(74, 23, 'penghasilan', '1.000.000-2.000.000', 2, 1, 0.3),
+(75, 23, 'jumlahtanggungan', '4', 3, 0.75, 0.15),
+(76, 23, 'kondisirumah', 'Bambu Lantai Tanah', 1, 1, 0.3),
+(81, 14, 'pekerjaan', 'Wirausaha/Wiraswasta', 4, 0.25, 0.05),
+(82, 14, 'penghasilan', '>2.000.000-3.000.000', 3, 0.666667, 0.2),
+(83, 14, 'jumlahtanggungan', '3', 2, 0.5, 0.1),
+(84, 14, 'kondisirumah', 'Tembok Lantai Plester', 4, 0.25, 0.075);
 
 -- --------------------------------------------------------
 
@@ -59,8 +121,10 @@ CREATE TABLE `kriterias` (
 --
 
 INSERT INTO `kriterias` (`id`, `namakriteria`, `bobot`, `attribute`, `kategori`, `nilai`, `updated_at`, `created_at`) VALUES
-(12, 'Kondisi Rumah', 6, 'cost', 'Reyot|Triplek', '1|2', '2023-03-04 07:00:13', '2023-03-04 07:00:13'),
-(14, 'penghasilan', 0.3, 'benefit', '1jt - 2jt|2jt - 3jt', '1|2', '2023-03-08 11:18:29', '2023-03-08 11:18:29');
+(20, 'Pekerjaan', 0.2, 'cost', 'PNS/Karyawan Swasta|Wirausaha/Wiraswasta|Buruh|Petani|Lain-lain', '5|4|3|2|1', '2023-04-15 06:37:37', '2023-04-15 06:37:37'),
+(21, 'Penghasilan', 0.3, 'cost', '<=1.000.000|1.000.000-2.000.000|>2.000.000-3.000.000|>3.000.000-4.000.000|>4.000.000', '1|2|3|4|5', '2023-04-15 06:48:07', '2023-04-15 06:39:38'),
+(22, 'Jumlah Tanggungan', 0.2, 'benefit', '<=2|3|4|>=5', '1|2|3|4', '2023-04-15 06:40:21', '2023-04-15 06:40:21'),
+(23, 'Kondisi Rumah', 0.3, 'cost', 'Bambu Lantai Tanah|Bambu Lantai Plester|Tembok Lantai Tanah|Tembok Lantai Plester|Tembok Lantai Keramik', '1|2|3|4|5', '2023-04-15 06:41:37', '2023-04-15 06:41:37');
 
 -- --------------------------------------------------------
 
@@ -138,11 +202,46 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'admin1', 'admin@bansos.com', NULL, '$2y$10$HqfM/2JgJud7Wd4tNMqfouD8SUzOxvfHUMDKJAiGqiakVr/ho4wSi', NULL, '2022-11-01 07:27:41', '2022-11-01 07:27:41'),
-(3, 'Hadis', 'hadis@admindesa.id', NULL, '$2y$10$mkO5ojCVrA0UEiKmiLXXSuNhwOu/n1N1Sa1A8DpPL8HiyH2Kzmc5e', NULL, '2023-02-17 06:23:36', '2023-02-17 06:23:36');
+(3, 'Hadis', 'hadis@admindesa.id', NULL, '$2y$10$mkO5ojCVrA0UEiKmiLXXSuNhwOu/n1N1Sa1A8DpPL8HiyH2Kzmc5e', NULL, '2023-02-17 06:23:36', '2023-02-17 06:23:36'),
+(4, 'administrator', 'admin@spkbansos.desa', NULL, '$2y$10$WfWCHkSoKUv3W3PlE13DTeU9MBosT/hUGfwSU5nCA7jWWaArUodc6', NULL, '2023-04-07 02:35:17', '2023-04-07 02:35:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wargas`
+--
+
+CREATE TABLE `wargas` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(50) DEFAULT NULL,
+  `nik` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `wargas`
+--
+
+INSERT INTO `wargas` (`id`, `nama`, `nik`) VALUES
+(13, 'Ratno', '307981239218412'),
+(14, 'Rudi', '149381798301841035'),
+(16, 'Rukmanah', '6619276841239'),
+(17, 'Salim', '1812323912311'),
+(18, 'Sumiyati', '123580234981294'),
+(19, 'Tio', '24356179833812479'),
+(20, 'Nurdin', '134812398112523'),
+(21, 'Marwan', '134234718982388'),
+(22, 'Sumarni', '12124712839'),
+(23, 'Yanto', '1248172939798');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `detail_wargas`
+--
+ALTER TABLE `detail_wargas`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `failed_jobs`
@@ -185,8 +284,20 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
+-- Indexes for table `wargas`
+--
+ALTER TABLE `wargas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `detail_wargas`
+--
+ALTER TABLE `detail_wargas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -198,7 +309,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `kriterias`
 --
 ALTER TABLE `kriterias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -216,7 +327,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `wargas`
+--
+ALTER TABLE `wargas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
